@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SkeMapper.Test.TestModels;
 using System;
+using System.Collections.Generic;
 
 namespace SkeMapper.Test
 {
@@ -20,7 +21,6 @@ namespace SkeMapper.Test
             Mapper = null;
         }
     }
-
 
     public class MapperTests : TestMapperBase
     {
@@ -84,12 +84,12 @@ namespace SkeMapper.Test
             Mapper.CreateMap<PhoneDto, Phone>();
             Mapper.CreateMap<ContactDto, Contact>();
 
+            // Expected result
             var contact = new Contact
             {
                 Person = new Person { FirstName = "Skerdi", LastName = "Berberi", Addres = "PG", Age = 22 },
                 Phone = new Phone { PhoneNumber = "0111111", Prefix = "+355" }
             };
-            // Expected result
             var contactDto = new ContactDto
             {
                 Person = new PersonDto { FirstName = "Skerdi", LastName = "Berberi" },
@@ -117,10 +117,41 @@ namespace SkeMapper.Test
         }
 
         [Test]
-        public void MapPrimitiveOrValueTypes()
+        public void MapBuiltInCSharpTypes()
         {
             Assert.That(() => Mapper.CreateMap<string, Person>(),
-            Throws.TypeOf<Exception>().With.Message.EqualTo("Primitive Or value types could not be mapped!"));
+            Throws.TypeOf<Exception>().With.Message.EqualTo("C# built-in types or value types can't be mapped!"));
         }
+
+        [Test]
+        public void Map100Times()
+        {
+            Mapper.CreateMap<PersonDto, Person>();
+            Mapper.CreateMap<PhoneDto, Phone>();
+            Mapper.CreateMap<ContactDto, Contact>();
+
+            var contactDto = new ContactDto
+            {
+                Person = new PersonDto { FirstName = "Skerdi", LastName = "Berberi" },
+                Phone = new PhoneDto { PhoneNumber = "0111111", Prefix = "+355" }
+            };
+
+            List<Contact> contacts = new List<Contact>();
+            for (int i = 0; i < 100; i++)
+                contacts.Add(Mapper.Map<Contact>(contactDto));
+
+            foreach (var contact in contacts)
+                Assert.AreEqual(contact.Person.FirstName, contactDto.Person.FirstName);
+        }
+
+        // TODO: 
+        //[Test]
+        //public void MapWithCollectionTypes()
+        //{
+        //    Mapper.CreateMap<List<PersonDto>, List<Person>>();
+        //    var person = new List<Person> { new Person { FirstName = "Skerdi", LastName = "Berberi", Addres = "PG", Age = 22 } };
+        //    var personDto = new List<PersonDto> { new PersonDto { FirstName = "Skerdi", LastName = "Berberi" } };
+        //    //var result = Mapper.Map<List<PersonDto>>(person);
+        //}
     }
 }

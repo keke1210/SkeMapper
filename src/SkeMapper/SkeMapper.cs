@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Linq;
 
@@ -15,8 +16,8 @@ namespace SkeMapper
             var typeIn = typeof(TIn);
             var typeOut = typeof(TOut);
 
-            if (IsPrimitiveOrValueType(typeIn) || IsPrimitiveOrValueType(typeOut))
-                throw new Exception("Primitive Or value types could not be mapped!");
+            if (IsBuiltInType(typeIn) || IsBuiltInType(typeOut))
+                throw new Exception("C# built-in types or value types can't be mapped!");
 
             Pairs.TryAdd(typeIn, typeOut);
         }
@@ -29,10 +30,10 @@ namespace SkeMapper
             TDestination result = default;
 
             // If type exists (is registered)
-            if (Pairs.TryGetValue(sourceType, out Type _))
+            if (Pairs.TryGetValue(sourceType, out Type type))
                 result = ResolveTypeMap(source) as TDestination;
 
-            if(result == default || result == null)
+            if (result == default || result == null)
                 throw new Exception("There is no Mapper configured for this object.");
 
             return result;
@@ -54,7 +55,7 @@ namespace SkeMapper
                 {
                     var currentProperty = destination.GetType().GetProperty(propertyName);
 
-                    if (!IsPrimitiveOrValueType(currentProperty.PropertyType))
+                    if (!IsBuiltInType(currentProperty.PropertyType))
                     { 
                         var child = this.ResolveTypeMap(propertyValue);
 
@@ -70,7 +71,49 @@ namespace SkeMapper
             return destination;
         }
 
-        private static bool IsPrimitiveOrValueType(Type type) 
+        // TODO: 
+        public object ResolveCollectionTypeMap(object source)
+        {
+            if (!(source is IEnumerable))
+                throw new ArgumentException("To do");
+
+            var sourceType = source.GetType();
+
+            Pairs.TryGetValue(sourceType, out Type destinationType);
+
+            var sourceProperties = sourceType.GetProperties().ToDictionary(x => x.Name, y => y.GetValue(source, null));
+            var destinationProperties = destinationType.GetProperties().Select(x => x.Name);
+
+            var destination = Activator.CreateInstance(destinationType);
+
+            foreach (var propertyName in destinationProperties)
+            {
+                if (sourceProperties.TryGetValue(propertyName, out object propertyValue))
+                {
+                    var currentProperty = destination.GetType().GetProperty(propertyName);
+
+                    if (!IsBuiltInType(currentProperty.PropertyType))
+                    {
+                        var child = this.ResolveTypeMap(propertyValue);
+
+                        currentProperty.SetValue(destination, child, null);
+                    }
+                    else
+                    {
+                        currentProperty.SetValue(destination, propertyValue, null);
+                    }
+                }
+            }
+
+            return destination;
+        }
+
+        /// <summary>
+        /// Is C# built-in type or struct
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static bool IsBuiltInType(Type type) 
         {
             return !(type.IsClass && string.IsNullOrEmpty(type.Namespace) ||
                    (!type.Namespace.Equals("System") && !type.Namespace.StartsWith("System.")));
