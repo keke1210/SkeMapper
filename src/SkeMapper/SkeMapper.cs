@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Reflection;
 
 namespace SkeMapper
 {
@@ -44,16 +45,17 @@ namespace SkeMapper
             var sourceType = source.GetType();
             Pairs.TryGetValue(sourceType, out Type destinationType);
 
-            var sourceProperties = sourceType.GetProperties().ToDictionary(x => x.Name, y => y.GetValue(source, null));
-            var destinationProperties = destinationType.GetProperties().Select(x => x.Name);
+            var sourceProperties = sourceType.GetProperties().ToDictionary(x => x.Name.ToLower(), y => y.GetValue(source, null));
+            var destinationProperties = destinationType.GetProperties().Select(x => x.Name.ToLower());
 
             var destination = Activator.CreateInstance(destinationType);
 
             foreach (var propertyName in destinationProperties)
             {
-                if (sourceProperties.TryGetValue(propertyName, out object propertyValue))
+                if (sourceProperties.TryGetValue(propertyName.ToLower(), out object propertyValue))
                 {
-                    var currentProperty = destination.GetType().GetProperty(propertyName);
+                    var currentProperty = destination.GetType()
+                        .GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
 
                     if (!IsBuiltInType(currentProperty.PropertyType))
                     { 
@@ -90,7 +92,7 @@ namespace SkeMapper
             {
                 if (sourceProperties.TryGetValue(propertyName, out object propertyValue))
                 {
-                    var currentProperty = destination.GetType().GetProperty(propertyName);
+                    var currentProperty = destination.GetType().GetProperty(propertyName, BindingFlags.IgnoreCase);
 
                     if (!IsBuiltInType(currentProperty.PropertyType))
                     {

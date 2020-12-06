@@ -1,6 +1,6 @@
+using System;
 using NUnit.Framework;
 using SkeMapper.Test.TestModels;
-using System;
 using System.Collections.Generic;
 
 namespace SkeMapper.Test
@@ -142,6 +142,21 @@ namespace SkeMapper.Test
 
             foreach (var contact in contacts)
                 Assert.AreEqual(contact.Person.FirstName, contactDto.Person.FirstName);
+        }
+        
+        [Test]
+        public void MapCaseInSensitiveTest()
+        {
+            Mapper.CreateMap<Person, PersonDtoCaseInsensitive>();
+
+            var person = new Person { FirstName = "Skerdi", LastName = "Berberi", Addres = "PG", Age = 22 };
+            // excpected result
+            var personDto = new PersonDtoCaseInsensitive { firstnAme = "Skerdi", lasTname = "Berberi" };
+
+            var result = Mapper.Map<PersonDtoCaseInsensitive>(person);
+
+            Assert.AreEqual(personDto.firstnAme, result.firstnAme);
+            Assert.AreEqual(personDto.lasTname, result.lasTname);
         }
 
         // TODO: 

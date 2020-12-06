@@ -42,4 +42,10 @@
     {
 
     }
+
+    public class PersonDtoCaseInsensitive
+    {
+        public string firstnAme { get; set; }
+        public string lasTname { get; set; }
+    }
 }
