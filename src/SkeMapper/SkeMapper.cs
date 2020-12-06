@@ -12,17 +12,24 @@ namespace SkeMapper
             where TIn : class 
             where TOut : class 
         {
-            Pairs.TryAdd(typeof(TIn), typeof(TOut));
+            var typeIn = typeof(TIn);
+            var typeOut = typeof(TOut);
+
+            if (IsPrimitiveOrValueType(typeIn) || IsPrimitiveOrValueType(typeOut))
+                throw new Exception("Primitive Or value types could not be mapped!");
+
+            Pairs.TryAdd(typeIn, typeOut);
         }
 
-        public TDestination Map<TDestination>(object source) where TDestination : class
+        public TDestination Map<TDestination>(object source) 
+            where TDestination : class
         {
             var sourceType = source.GetType();
 
             TDestination result = default;
 
             // If type exists (is registered)
-            if (Pairs.TryGetValue(sourceType, out Type type))
+            if (Pairs.TryGetValue(sourceType, out Type _))
                 result = ResolveTypeMap(source) as TDestination;
 
             if(result == default || result == null)
@@ -46,10 +53,8 @@ namespace SkeMapper
                 if (sourceProperties.TryGetValue(propertyName, out object propertyValue))
                 {
                     var currentProperty = destination.GetType().GetProperty(propertyName);
-                    var currentPropertyType = currentProperty.PropertyType;
 
-                    if (currentPropertyType.IsClass && string.IsNullOrEmpty(currentPropertyType.Namespace) ||
-                       (!currentPropertyType.Namespace.Equals("System") && !currentPropertyType.Namespace.StartsWith("System.")))
+                    if (!IsPrimitiveOrValueType(currentProperty.PropertyType))
                     { 
                         var child = this.ResolveTypeMap(propertyValue);
 
@@ -63,6 +68,12 @@ namespace SkeMapper
             }
 
             return destination;
+        }
+
+        private static bool IsPrimitiveOrValueType(Type type) 
+        {
+            return !(type.IsClass && string.IsNullOrEmpty(type.Namespace) ||
+                   (!type.Namespace.Equals("System") && !type.Namespace.StartsWith("System.")));
         }
     }
 }

@@ -106,12 +106,21 @@ namespace SkeMapper.Test
         public void MapUnRegisteredModels()
         {
             Mapper.CreateMap<Contact, Person>();
-
-            Assert.That(() => Mapper.Map<ContactDto>(new Contact
+            var contact = new Contact
             {
                 Person = new Person { FirstName = "Skerdi", LastName = "Berberi", Addres = "PG", Age = 22 },
                 Phone = new Phone { PhoneNumber = "0111111", Prefix = "+355" }
-            }), Throws.TypeOf<Exception>().With.Message.EqualTo("There is no Mapper configured for this object."));
+            };
+
+            Assert.That(() => Mapper.Map<ContactDto>(contact),
+            Throws.TypeOf<Exception>().With.Message.EqualTo("There is no Mapper configured for this object."));
+        }
+
+        [Test]
+        public void MapPrimitiveOrValueTypes()
+        {
+            Assert.That(() => Mapper.CreateMap<string, Person>(),
+            Throws.TypeOf<Exception>().With.Message.EqualTo("Primitive Or value types could not be mapped!"));
         }
     }
 }
