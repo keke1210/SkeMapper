@@ -2,9 +2,9 @@
 
 namespace SkeMapper.ResolveTypeLogic
 {
-    public sealed class ResolverFactory
+    internal sealed class ResolverFactory
     {
-        public IResolver Create(ResolveType resolveType)
+        internal IResolver Create(ResolveType resolveType)
         {
             var container = Container.Instance;
             switch (resolveType)
