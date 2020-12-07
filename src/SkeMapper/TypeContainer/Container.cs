@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 
 namespace SkeMapper.TypeContainer
 {
-    public sealed class Container : IContainer
+    internal sealed class Container : IContainer
     {
         static Container() { }
         private Container() { }

@@ -6,7 +6,7 @@ namespace SkeMapper.Settings
     {
         private readonly IContainer container;
 
-        public MapperOptions(IContainer container)
+        internal MapperOptions(IContainer container)
         {
             this.container = container;
         }
