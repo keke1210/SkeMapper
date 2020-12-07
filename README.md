@@ -1,3 +1,3 @@
 # SkeMapper
 
-.NET Class Library that helps you to mapp entities in .NET projects. 
+.NET Class Library that helps you to map entities in .NET projects.
