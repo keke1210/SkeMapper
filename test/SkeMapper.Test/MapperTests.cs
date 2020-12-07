@@ -158,15 +158,5 @@ namespace SkeMapper.Test
             Assert.AreEqual(personDto.firstnAme, result.firstnAme);
             Assert.AreEqual(personDto.lasTname, result.lasTname);
         }
-
-        // TODO: 
-        //[Test]
-        //public void MapWithCollectionTypes()
-        //{
-        //    Mapper.CreateMap<List<PersonDto>, List<Person>>();
-        //    var person = new List<Person> { new Person { FirstName = "Skerdi", LastName = "Berberi", Addres = "PG", Age = 22 } };
-        //    var personDto = new List<PersonDto> { new PersonDto { FirstName = "Skerdi", LastName = "Berberi" } };
-        //    //var result = Mapper.Map<List<PersonDto>>(person);
-        //}
     }
 }

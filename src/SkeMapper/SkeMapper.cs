@@ -73,45 +73,6 @@ namespace SkeMapper
             return destination;
         }
 
-        // TODO: 
-        [Obsolete]
-        public object ResolveCollectionTypeMap(object source)
-        {
-            if (!(source is IEnumerable))
-                throw new ArgumentException("To do");
-
-            var sourceType = source.GetType();
-
-            Pairs.TryGetValue(sourceType, out Type destinationType);
-
-            var sourceProperties = sourceType.GetProperties().ToDictionary(x => x.Name, y => y.GetValue(source, null));
-            var destinationProperties = destinationType.GetProperties().Select(x => x.Name);
-
-            var destination = Activator.CreateInstance(destinationType);
-
-            foreach (var propertyName in destinationProperties)
-            {
-                if (sourceProperties.TryGetValue(propertyName, out object propertyValue))
-                {
-                    var currentProperty = destination.GetType().GetProperty(
-                        propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-
-                    if (!IsBuiltInType(currentProperty.PropertyType))
-                    {
-                        var child = this.ResolveTypeMap(propertyValue);
-
-                        currentProperty.SetValue(destination, child, null);
-                    }
-                    else
-                    {
-                        currentProperty.SetValue(destination, propertyValue, null);
-                    }
-                }
-            }
-
-            return destination;
-        }
-
         /// <summary>
         /// Is C# built-in type or struct
         /// </summary>
