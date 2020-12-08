@@ -7,7 +7,7 @@ namespace SkeMapper
 {
     public sealed class SkeMapper : IMapper
     {
-        public Lazy<IContainer> MapperContainer { get; } = new Lazy<IContainer>(() => Container.Instance);
+        public Lazy<IContainer> MapperContainer { get; } = new Lazy<IContainer>(() => Container.Instance, true);
         private SkeMapper() { }
         public static SkeMapper Instance => new SkeMapper();
 

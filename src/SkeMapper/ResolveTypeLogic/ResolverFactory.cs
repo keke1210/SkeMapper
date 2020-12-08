@@ -18,8 +18,9 @@ namespace SkeMapper.ResolveTypeLogic
                     return new SingleTypeResolver(container);
                 case ResolveType.Collection:
                     return new CollectionTypeResolver(container);
+                default:
+                    return new SingleTypeResolver(container);
             }
-            return null;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SkeMapper.Builder;
-using SkeMapper.Exceptions;
 using SkeMapper.Settings;
 using SkeMapper.Test.TestModels;
 using System.Collections.Generic;
@@ -53,21 +52,21 @@ namespace SkeMapper.Test
             Assert.AreEqual(contact.Person.LastName, result.Person.LastName);
         }
 
-        //[Test]
-        //public void Map100Times()
-        //{
-        //    var contact = new Contact 
-        //    { 
-        //        Person = new Person { FirstName = "Skerdi", LastName = "Berberi" },
-        //        Phone = new Phone { PhoneNumber = "0111111", Prefix = "+355" }
-        //    };
+        [Test]
+        public void Map100Times()
+        {
+            var contact = new Contact 
+            { 
+                Person = new Person { FirstName = "Skerdi", LastName = "Berberi" },
+                Phone = new Phone { PhoneNumber = "0111111", Prefix = "+355" }
+            };
 
-        //    var contactDtos = new List<ContactDto>();
-        //    for (int i = 0; i < 100; i++)
-        //        contactDtos.Add(Mapper.Map<ContactDto>(contact));
+            var contactDtos = new List<ContactDto>();
+            for (int i = 0; i < 100; i++)
+                contactDtos.Add(Mapper.Map<ContactDto>(contact));
 
-        //    foreach (var contactDto in contactDtos)
-        //        Assert.AreEqual(contact.Person.FirstName, contactDto.Person.FirstName);
-        //}
+            foreach (var contactDto in contactDtos)
+                Assert.AreEqual(contact.Person.FirstName, contactDto.Person.FirstName);
+        }
     }
 }
