@@ -22,6 +22,13 @@ namespace SkeMapper.TypeContainer
                 throw new DuplicateRegisteredTypeException("Duplicate types could not be registered as source!");
         }
 
+        public void CreateCollectionMap(Type typeSource, Type typeDestination)
+        {
+            var typeWasAddedToContainer = Mappings.TryAdd(typeSource, typeDestination);
+            if (!typeWasAddedToContainer)
+                throw new DuplicateRegisteredTypeException("Duplicate types could not be registered as source!");
+        }
+
         public Type GetRegisteredMapping(Type key)
         {
             if(Mappings.TryGetValue(key, out Type result) == false)

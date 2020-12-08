@@ -7,6 +7,7 @@ namespace SkeMapper.TypeContainer
     {
         ConcurrentDictionary<Type, Type> Mappings { get; }
         void CreateMap(Type typeSource, Type typeDestination);
+        void CreateCollectionMap(Type typeSource, Type typeDestination);
         Type GetRegisteredMapping(Type key);
     }
 }

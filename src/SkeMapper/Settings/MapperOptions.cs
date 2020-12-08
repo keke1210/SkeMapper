@@ -1,4 +1,5 @@
 ﻿using SkeMapper.TypeContainer;
+using System.Collections;
 
 namespace SkeMapper.Settings
 {

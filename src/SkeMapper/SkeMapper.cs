@@ -14,14 +14,9 @@ namespace SkeMapper
 
         public TDestination Map<TDestination>(object source)
         {
-            if (source is TDestination sourceRes)
-            {
-                return sourceRes;
-            }
+            var factory = new ResolverFactory(MapperContainer.Value);
 
             var resolveType = source is IEnumerable ? ResolveType.Collection : ResolveType.Single;
-
-            var factory = new ResolverFactory(MapperContainer.Value);
             IResolver resolver = factory.Create(resolveType);
 
             var destination = resolver.ResolveTypeMap(source);

@@ -18,6 +18,8 @@ namespace SkeMapper.Test
                 config.CreateMap<PersonDto, Person>();
                 config.CreateMap<PersonDtoCaseInsensitive, Person>();
                 config.CreateMap<PhoneDto, Phone>();
+
+                //config.CreateCollectionMap<List<PersonDto>, List<Person>>();
             });
 
             Mapper = MapperBuilder.Instance.ApplySettings(mapperSettings).Build();
@@ -83,5 +85,17 @@ namespace SkeMapper.Test
             Assert.AreEqual(personDto.firstnAme, result.FirstName);
             Assert.AreEqual(personDto.lasTname, result.LastName);
         }
+
+        //[Test]
+        //public void MapFromCollectionDtoToCollectionDomainModel()
+        //{
+        //    var personDtoList = new List<PersonDto> 
+        //    {
+        //        new PersonDto { FirstName = "Skerdi", LastName = "Berberi" },
+        //        new PersonDto { FirstName = "Altjen", LastName = "Berberi" }
+        //    };
+
+        //    var result = Mapper.Map<List<Person>>(personDtoList);
+        //}
     }
 }

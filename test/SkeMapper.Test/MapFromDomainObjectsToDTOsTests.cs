@@ -12,14 +12,14 @@ namespace SkeMapper.Test
         [SetUp]
         public void BeforeEach()
         {
-            var mapperSettings = new MapperSettings((config) =>
-            {
-                config.CreateMap<Contact, ContactDto>();
-                config.CreateMap<Person, PersonDto>();
-                config.CreateMap<Phone, PhoneDto>();
-            });
 
-            Mapper = MapperBuilder.Instance.ApplySettings(mapperSettings).Build();
+            Mapper = MapperBuilder.Instance.ApplySettings(new MapperSettings((config) =>
+                                    {
+                                        config.CreateMap<Contact, ContactDto>();
+                                        config.CreateMap<Person, PersonDto>();
+                                        config.CreateMap<Phone, PhoneDto>();
+                                    }))
+                                    .Build();
         }
 
         [TearDown]

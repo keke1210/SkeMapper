@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SkeMapper.Builder;
 using SkeMapper.Settings;
-using SkeMapper.TypeContainer;
 using System;
 
 namespace SkeMapper.Extensions

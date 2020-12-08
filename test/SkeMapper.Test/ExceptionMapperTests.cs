@@ -9,20 +9,6 @@ namespace SkeMapper.Test
     public class ExceptionMapperTests
     {
         [Test]
-        public void TestManyMappers()
-        {
-            var mapperSettings = new MapperSettings((config) =>
-            {
-                config.CreateMap<Person, PersonDto>();
-            });
-
-            IMapper mapper1 = MapperBuilder.Instance.ApplySettings(mapperSettings).Build();
-
-            IMapper mapper2 = MapperBuilder.Instance.ApplySettings(mapperSettings).Build();
-        }
-
-
-        [Test]
         public void ConfigureTwoMappingsForTheSameType()
         {
             var mapperSettings = new MapperSettings((config) =>
@@ -33,7 +19,7 @@ namespace SkeMapper.Test
 
             Assert.That(() => MapperBuilder.Instance.ApplySettings(mapperSettings).Build(),
             Throws.TypeOf<DuplicateRegisteredTypeException>().With.Message
-                    .EqualTo("Duplicate types could not be registered as source!"));
+                  .EqualTo("Duplicate types could not be registered as source!"));
         }
 
         [Test]
@@ -47,6 +33,29 @@ namespace SkeMapper.Test
             Assert.That(() => MapperBuilder.Instance.ApplySettings(mapperSettings).Build(),
             Throws.TypeOf<RegisterBuiltInTypesException>().With.Message
                     .EqualTo("C# built-in types or value types can't be mapped!"));
+        }
+
+        [Test]
+        public void MapWithItself()
+        {
+            var mapper = MapperBuilder.Instance.ApplySettings(new MapperSettings((x) =>
+            {
+                x.CreateMap<ContactDto, MixedModelContact>();
+                x.CreateMap<PersonDto, PersonDto>();
+                x.CreateMap<PhoneDto, Phone>();
+            })) 
+            .Build();
+
+            var contactDto = new ContactDto
+            {
+                Person = new PersonDto { FirstName = "Skerdi", LastName = "Berberi" },
+                Phone = new PhoneDto { PhoneNumber = "0111111", Prefix = "+355" }
+            };
+
+            var result = mapper.Map<MixedModelContact>(contactDto);
+
+            Assert.AreEqual(contactDto.Person.FirstName, result.Person.FirstName);
+            Assert.AreEqual(contactDto.Person.LastName, result.Person.LastName);
         }
     }
 }
