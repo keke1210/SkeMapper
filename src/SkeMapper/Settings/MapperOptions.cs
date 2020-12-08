@@ -2,7 +2,7 @@
 
 namespace SkeMapper.Settings
 {
-    public class MapperOptions
+    public class MapperOptions 
     {
         private readonly IContainer container;
 

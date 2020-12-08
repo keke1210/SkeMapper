@@ -1,6 +1,6 @@
 ﻿namespace SkeMapper.ResolveTypeLogic
 {
-    internal interface IResolver
+    public interface IResolver
     {
         object ResolveTypeMap(object source);
     }

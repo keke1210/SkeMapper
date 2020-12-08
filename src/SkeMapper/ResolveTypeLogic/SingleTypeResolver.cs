@@ -18,7 +18,7 @@ namespace SkeMapper.ResolveTypeLogic
         public object ResolveTypeMap(object source)
         {
             var sourceType = source.GetType();
-            container.Pairs.TryGetValue(sourceType, out Type destinationType);
+            var destinationType = container.GetRegisteredMapping(sourceType);
 
             var sourceProperties = sourceType.GetProperties().ToDictionary(k => k.Name.ToLower(), v => v.GetValue(source, null));
             var destinationProperties = destinationType.GetProperties().Select(x => x.Name.ToLower());

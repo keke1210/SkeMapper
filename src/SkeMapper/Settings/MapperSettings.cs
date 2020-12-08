@@ -2,7 +2,7 @@
 
 namespace SkeMapper.Settings
 {
-    public class MapperSettings
+    public class MapperSettings : IMapperSettings
     {
         public MapperSettings(Action<MapperOptions> config = null)
         {
