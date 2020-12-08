@@ -5,7 +5,7 @@ namespace SkeMapper.Builder
 {
     public class MapperBuilder : IApplySettings, IBuildMapper
     {
-        private readonly Lazy<SkeMapper> mapperInstance = new Lazy<SkeMapper>(() => SkeMapper.Instance);
+        private readonly Lazy<SkeMapper> mapperInstance = new Lazy<SkeMapper>(() => SkeMapper.Instance, true);
 
         private MapperBuilder() { }
 

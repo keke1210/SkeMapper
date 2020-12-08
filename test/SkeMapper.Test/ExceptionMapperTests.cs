@@ -17,6 +17,7 @@ namespace SkeMapper.Test
             });
 
             IMapper mapper1 = MapperBuilder.Instance.ApplySettings(mapperSettings).Build();
+
             IMapper mapper2 = MapperBuilder.Instance.ApplySettings(mapperSettings).Build();
         }
 
