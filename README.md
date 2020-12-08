@@ -1,6 +1,6 @@
 # SkeMapper
 
-SkeMapper is a minimal object-to-object mapping library that can be used to map objects belonging to dissimilar types.
+SkeMapper is a simple object-to-object mapping library that can be used to map objects belonging to dissimilar types.
 
 * Very simple mapping library that maps entities by properties in a case-insensitive way.
   * Easy to initialize
@@ -50,7 +50,7 @@ And then get the instance like :
 ```
 ## Usage
 
-###Examples
+Example: Mapping a class which has other classes as property members 
 ```csharp
 using SkeMapper.Builder;
 using SkeMapper.Settings;
@@ -69,13 +69,12 @@ var contact = new Contact
                   Phone = new Phone { PhoneNumber = "0111111", Prefix = "+01" }
               };
 
-var result = Mapper.Map<ContactDto>(contact);
-// result :
-// new ContactDto 
-// { 
-//      Person = new PersonDto { FirstName = "John", LastName = "Doe" },
-//      Phone = new PhoneDto { PhoneNumber = "0111111", Prefix = "+01" }    
-// }
+var result = mapper.Map<ContactDto>(contact);
+// result: new ContactDto 
+//         { 
+//              Person = new PersonDto { FirstName = "John", LastName = "Doe" },
+//              Phone = new PhoneDto { PhoneNumber = "0111111", Prefix = "+01" }    
+//         }
 ```
 
 
