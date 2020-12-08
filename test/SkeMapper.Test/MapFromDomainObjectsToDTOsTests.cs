@@ -3,6 +3,7 @@ using SkeMapper.Builder;
 using SkeMapper.Settings;
 using SkeMapper.Test.TestModels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SkeMapper.Test
 {
@@ -67,6 +68,23 @@ namespace SkeMapper.Test
 
             foreach (var contactDto in contactDtos)
                 Assert.AreEqual(contact.Person.FirstName, contactDto.Person.FirstName);
+        }
+
+        [Test]
+        public void MapFromDtoCollectionToDomainModelCollection()
+        {
+            var personist = new List<Person>
+             {
+                 new Person { FirstName = "Skerdi", LastName = "Berberi" },
+                 new Person { FirstName = "Altjen", LastName = "Berberi" },
+                 new Person { FirstName = "Test123", LastName = "Test1234" },
+             };
+
+            var listResult = personist.Select(x => Mapper.Map<PersonDto>(x)).ToArray();
+
+            Assert.AreEqual(listResult[0].FirstName, personist[0].FirstName);
+            Assert.AreEqual(listResult[1].FirstName, personist[1].FirstName);
+            Assert.AreEqual(listResult[2].FirstName, personist[2].FirstName);
         }
     }
 }
