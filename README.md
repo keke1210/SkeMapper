@@ -50,7 +50,7 @@ And then get the instance like :
 ```
 ## Usage
 
-Example: Mapping a class which has other classes as property members 
+Example: Mapping an object which is composed with other objects
 ```csharp
 using SkeMapper.Builder;
 using SkeMapper.Settings;
@@ -75,8 +75,53 @@ var result = mapper.Map<ContactDto>(contact);
 //              Person = new PersonDto { FirstName = "John", LastName = "Doe" },
 //              Phone = new PhoneDto { PhoneNumber = "0111111", Prefix = "+01" }    
 //         }
+
 ```
 
+Example: Mapping through the list with LINQ and returning a collection with mapped objects.
+```csharp
+using System.Linq;
+// ...
+var peopleList = new List<Person>
+                {
+                    new Person { FirstName = "Skerdi", LastName = "Berberi" },
+                    new Person { FirstName = "Altjen", LastName = "Berberi" },
+                    new Person { FirstName = "John", LastName = "Doe" }
+                };
+
+var listResult = peopleList.Select(person => mapper.Map<PersonDto>(person)).ToList();
+```
+Example: Mapping against two models where ones property letters are the same but the ``Letter Case`` is different. 
+```csharp
+public class PersonDtoCaseInsensitive
+{
+    public string firstnAme { get; set; }
+    public string lasTname { get; set; }
+}
+
+public class Person
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public int Age { get; set; }
+    public string Address { get; set; }
+}
+
+IMapper mapper = MapperBuilder.Instance.ApplySettings(new MapperSettings((x) =>
+                                        {
+                                            x.CreateMap<PersonDtoCaseInsensitive, Person>();
+                                        }))
+                                        .Build();
+
+var personDto = new PersonDtoCaseInsensitive { firstnAme = "John", lasTname = "Doe" };
+var result = mapper.Map<Person>(personDto);
+// result: new Person 
+//         { 
+//             FirstName = "John",
+//             LastName = "Doe",
+//             ...
+//         }
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
