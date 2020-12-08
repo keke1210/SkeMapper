@@ -21,7 +21,7 @@ At first we need to declare the mappings of the library.
 ```csharp
 var mapperSettings = new MapperSettings((x) =>
 {
-    x.CreateMap<Person, PersonDto>();
+    x.CreateMap<PersonDtoCaseInsensitive, PersonDto>();
     x.CreateMap<Person, PersonDtoCaseInsensitive>();
 });
 
