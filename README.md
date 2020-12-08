@@ -1,4 +1,9 @@
-# SkeMapper
+## SkeMapper
+
+[![NuGet](https://img.shields.io/nuget/v/SkeMapper.svg)](https://www.nuget.org/packages/SkeMapper/)
+[![NuGetCount](https://img.shields.io/nuget/dt/SkeMapper.svg
+)](https://www.nuget.org/packages/SkeMapper/)
+
 
 SkeMapper is a simple object-to-object mapping library that can be used to map objects belonging to dissimilar types.
 

@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Skerdi Beberi</Authors>
+    <Company />
+    <Description>A simple object-to-object mapping library that can be used to map objects belonging to dissimilar types.</Description>
+    <PackageProjectUrl>https://github.com/keke1210/SkeMapper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/keke1210/SkeMapper</RepositoryUrl>
+    <PackageTags>mapper map object-mapping keke</PackageTags>
+    <PackageReleaseNotes>A simple object-to-object mapping library that can be used to map objects belonging to dissimilar types.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
