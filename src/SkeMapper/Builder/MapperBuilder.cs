@@ -1,23 +1,25 @@
 ﻿using SkeMapper.Settings;
-using SkeMapper.TypeContainer;
+using System;
 
 namespace SkeMapper.Builder
 {
     public class MapperBuilder : IApplySettings, IBuildMapper
     {
+        private readonly Lazy<SkeMapper> mapperInstance = new Lazy<SkeMapper>(() => SkeMapper.Instance);
+
         private MapperBuilder() { }
 
         public static IApplySettings Instance => new MapperBuilder();
 
-        public IBuildMapper ApplySettings(MapperSettings mapperSettings)
+        public IBuildMapper ApplySettings(IMapperSettings mapperSettings)
         {
-            mapperSettings.Config.Invoke(new MapperOptions(Container.Instance));
+            mapperSettings.Config.Invoke(new MapperOptions(mapperInstance.Value.MapperContainer.Value));
             return this;
         }
 
         public IMapper Build()
         {
-            return SkeMapper.Instance;
+            return mapperInstance.Value;
         }
     }
 }

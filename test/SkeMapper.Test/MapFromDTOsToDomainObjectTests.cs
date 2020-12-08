@@ -6,11 +6,9 @@ using System.Collections.Generic;
 
 namespace SkeMapper.Test
 {
-    public class FromDTOsToDomainObjectBaseTest
+    public class MapFromDTOsToDomainObjectTests
     {
-        protected IMapper Mapper;
-        protected MapperSettings Settings;
-
+        IMapper Mapper;
         [SetUp]
         public void BeforeEach()
         {
@@ -22,25 +20,18 @@ namespace SkeMapper.Test
                 config.CreateMap<PhoneDto, Phone>();
             });
 
-            Mapper = MapperBuilder
-                        .Instance
-                            .ApplySettings(mapperSettings)
-                            .Build();
+            Mapper = MapperBuilder.Instance.ApplySettings(mapperSettings).Build();
         }
 
         [TearDown]
         public void AfterEach()
         {
             Mapper = null;
-            Settings = null;
         }
-    }
 
 
-    public class MapFromDTOsToDomainObjectTests : FromDTOsToDomainObjectBaseTest
-    {
         [Test]
-        public void MapFromDomainModelToDto()
+        public void MapFromDtoToDomainModel()
         {
             var personDto = new PersonDto { FirstName = "Skerdi", LastName = "Berberi" };
             var result = Mapper.Map<Person>(personDto);
@@ -50,7 +41,7 @@ namespace SkeMapper.Test
         }
 
         [Test]
-        public void MapFromDomainModelToDtoWithComposition()
+        public void MapFromDtoToDomainModelWithComposition()
         {
             // Expected result
             var contactDto = new ContactDto
@@ -68,17 +59,17 @@ namespace SkeMapper.Test
         [Test]
         public void Map100Times()
         {
-            var contact = new Contact
+            var contactDto = new ContactDto
             {
-                Person = new Person { FirstName = "Skerdi", LastName = "Berberi" },
-                Phone = new Phone { PhoneNumber = "0111111", Prefix = "+355" }
+                Person = new PersonDto { FirstName = "Skerdi", LastName = "Berberi" },
+                Phone = new PhoneDto { PhoneNumber = "0111111", Prefix = "+355" }
             };
 
-            var contactDtos = new List<ContactDto>();
+            var contacts = new List<Contact>();
             for (int i = 0; i < 100; i++)
-                contactDtos.Add(Mapper.Map<ContactDto>(contact));
+                contacts.Add(Mapper.Map<Contact>(contactDto));
 
-            foreach (var contactDto in contactDtos)
+            foreach (var contact in contacts)
                 Assert.AreEqual(contact.Person.FirstName, contactDto.Person.FirstName);
         }
 

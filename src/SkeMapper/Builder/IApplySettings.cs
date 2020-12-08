@@ -4,6 +4,6 @@ namespace SkeMapper.Builder
 {
     public interface IApplySettings
     {
-        IBuildMapper ApplySettings(MapperSettings mapperSettings);
+        IBuildMapper ApplySettings(IMapperSettings mapperSettings);
     }
 }

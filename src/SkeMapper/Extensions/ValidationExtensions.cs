@@ -2,7 +2,7 @@
 
 namespace SkeMapper.Extensions
 {
-    internal static class HelperExtensions
+    internal static class ValidationExtensions
     {
         /// <summary>
         /// Is C# built-in type or struct

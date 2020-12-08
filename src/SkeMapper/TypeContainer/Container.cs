@@ -1,26 +1,33 @@
-﻿using SkeMapper.Extensions;
+﻿using SkeMapper.Exceptions;
+using SkeMapper.Extensions;
 using System;
 using System.Collections.Concurrent;
 
 namespace SkeMapper.TypeContainer
 {
-    internal sealed class Container : IContainer
+    public sealed class Container : IContainer
     {
-        static Container() { }
         private Container() { }
+        public static IContainer Instance => new Container();
 
-        private static Lazy<Container> lazyContainer = new Lazy<Container>(() => new Container(), true);
-
-        public static Container Instance => lazyContainer.Value;
-
-        public ConcurrentDictionary<Type, Type> Pairs { get; } = new ConcurrentDictionary<Type, Type>();
+        public ConcurrentDictionary<Type, Type> Mappings { get; } = new ConcurrentDictionary<Type, Type>();
 
         public void CreateMap(Type typeSource, Type typeDestination)
         {
             if (typeSource.IsBuiltInType() || typeDestination.IsBuiltInType())
-                throw new Exception("C# built-in types or value types can't be mapped!");
+                throw new RegisterBuiltInTypesException("C# built-in types or value types can't be mapped!");
 
-            Pairs.TryAdd(typeSource, typeDestination);
+            var typeWasAddedToContainer = Mappings.TryAdd(typeSource, typeDestination);
+            if(!typeWasAddedToContainer) 
+                throw new DuplicateRegisteredTypeException("Duplicate types could not be registered as source!");
+        }
+
+        public Type GetRegisteredMapping(Type key)
+        {
+            if(Mappings.TryGetValue(key, out Type result) == false)
+                throw new MappingNotExistsException("This mapping is not registered in settings.");
+
+            return result;
         }
     }
 }
