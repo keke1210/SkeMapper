@@ -20,6 +20,9 @@ namespace SkeMapper.ResolveTypeLogic
 
         public object ResolveTypeMap(object source)
         {
+            if (source == null)
+                return null;
+
             var sourceType = source.GetType();
             var destinationType = container.GetRegisteredMapping(sourceType);
 
