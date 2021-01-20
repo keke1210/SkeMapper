@@ -2,7 +2,6 @@
 using SkeMapper.TypeContainer;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -48,11 +47,18 @@ namespace SkeMapper.ResolveTypeLogic
 
                     if (!currentProperty.PropertyType.IsBuiltInType())
                     {
-                        var child = this.ResolveTypeMap(propertyValue);
+                        if(propertyValue == null)
+                        {
+                            currentProperty.SetValue(destination, null, null);
+                        }
+                        else
+                        {
+                            var child = this.ResolveTypeMap(propertyValue);
 
-                        memo.TryAdd(propertyValue, child);
+                            memo.TryAdd(propertyValue, child);
 
-                        currentProperty.SetValue(destination, memo[propertyValue], null);
+                            currentProperty.SetValue(destination, child, null);
+                        }
                     }
                     else
                     {

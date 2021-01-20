@@ -4,6 +4,8 @@ using SkeMapper.Settings;
 using SkeMapper.Test.TestModels;
 using System.Collections.Generic;
 using System.Linq;
+using static SkeMapper.Test.TestModels.DynamicObject;
+using static SkeMapper.Test.TestModels.DynamicObjectDTO;
 
 namespace SkeMapper.Test
 {
@@ -19,6 +21,8 @@ namespace SkeMapper.Test
                                         config.CreateMap<Contact, ContactDto>();
                                         config.CreateMap<Person, PersonDto>();
                                         config.CreateMap<Phone, PhoneDto>();
+                                        config.CreateMap<DynamicObject, DynamicObjectDTO>();
+                                        config.CreateMap<Node, NodeDto>();
                                     }))
                                     .Build();
         }
@@ -68,6 +72,28 @@ namespace SkeMapper.Test
 
             foreach (var contactDto in contactDtos)
                 Assert.AreEqual(contact.Person.FirstName, contactDto.Person.FirstName);
+        } 
+        
+        [Test]
+        public void MapVeryBigDynamicObjectToDTO()
+        {
+            // Linked List
+            DynamicObject dybnamicObj = new DynamicObject();
+
+            for(int i = 0; i < 7; i++)
+            {
+                dybnamicObj.Push(i);
+            }
+
+            var dto = Mapper.Map<DynamicObjectDTO>(dybnamicObj);
+
+            Assert.AreEqual(dybnamicObj.Head.Data, dto.Head.Data);
+            Assert.AreEqual(dybnamicObj.Head.Next.Data, dto.Head.Next.Data);
+            Assert.AreEqual(dybnamicObj.Head.Next.Next.Data, dto.Head.Next.Next.Data);
+            Assert.AreEqual(dybnamicObj.Head.Next.Next.Next.Data, dto.Head.Next.Next.Next.Data);
+            Assert.AreEqual(dybnamicObj.Head.Next.Next.Next.Next.Data, dto.Head.Next.Next.Next.Next.Data);
+            Assert.AreEqual(dybnamicObj.Head.Next.Next.Next.Next.Next.Data, dto.Head.Next.Next.Next.Next.Next.Data);
+            Assert.AreEqual(dybnamicObj.Head.Next.Next.Next.Next.Next.Next.Data, dto.Head.Next.Next.Next.Next.Next.Next.Data);
         }
 
         [Test]
